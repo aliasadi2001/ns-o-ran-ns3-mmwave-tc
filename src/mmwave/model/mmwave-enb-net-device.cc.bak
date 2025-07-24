@@ -841,19 +841,8 @@ MmWaveEnbNetDevice::BuildRicIndicationMessageCuUp(std::string plmId)
         // uePmString.insert(std::make_pair(imsi,
         //                                  ",,,,,," + std::to_string(txPdcpPduBytesNrRlc) + "," +
         //                                      std::to_string(txPdcpPduNrRlc)));
-        //uePmString.insert(std::make_pair(imsi,
-        //                                 ",,,,,,,,,"));
-        std::string uePmsContent =
-            std::to_string(txBytes) + "," +
-            std::to_string(txDlPackets) + "," +
-            std::to_string(pdcpThroughput) + "," +
-            std::to_string(pdcpLatency) + "," +
-            std::to_string(0) + "," + // Placeholder if txPdcpPduLteRlc is not directly available
-            std::to_string(0) + "," + // Placeholder if txPdcpPduBytesLteRlc is not directly available
-            std::to_string(txPdcpPduBytesNrRlc) + "," +
-            std::to_string(txPdcpPduNrRlc);
-	uePmString.insert(std::make_pair(imsi, uePmsContent));
-
+        uePmString.insert(std::make_pair(imsi,
+                                         ",,,,,,,,,"));
     }
 
     if (!indicationMessageHelper->IsOffline())
@@ -890,15 +879,8 @@ MmWaveEnbNetDevice::BuildRicIndicationMessageCuUp(std::string plmId)
 
             auto uePms = uePmString.find(imsi)->second;
 
-            //std::string to_print = std::to_string(timestamp) + "," + ueImsiComplete + "," + "," +
-            //                       "," + "," + uePms + "\n";
-
-
-	    std::string to_print = std::to_string(timestamp) + "," + ueImsiComplete + "," +
-                               std::to_string(perUserAverageLatencySum) + "," + // DRB.PdcpSduDelayDl(cellAverageLatency)
-                               std::to_string(0) + "," + // m_pDCPBytesUL(0)
-                               std::to_string(cellDlTxVolume) + "," + // m_pDCPBytesDL(cellDlTxVolume)
-                               uePms + "\n"; // This now contains the UE-specific metrics
+            std::string to_print = std::to_string(timestamp) + "," + ueImsiComplete + "," + "," +
+                                   "," + "," + uePms + "\n";
 
             csv << to_print;
         }
